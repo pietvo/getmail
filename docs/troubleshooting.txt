@@ -7,16 +7,35 @@
    please refer to the documentation included with that version of the
    software.
 
-   getmail is Copyright © 1998-2019 Charles Cazabon.
+   getmail is Copyright © 1998-2021 Charles Cazabon.
 
    getmail is licensed under the GNU General Public License version 2 (only).
    If you wish to obtain a license to distribute getmail under other terms,
    please contact me directly.
 
+   Note that this license allows you to "fork" getmail. If you do so, please
+   follow open-source/free-software best practices and rename your fork so
+   the package name and executable name do not contain the word "getmail" or
+   anything confusing similar. This helps prevent users mistakenly contacting
+   the wrong people for help. The fork must also remain under the GPLv2
+   license, and must preserve all existing copyright notices in the code and
+   documentation.
+
                             Troubleshooting problems
 
    If you have suggestions for additions or changes to this documentation,
    please send them to the mailing list or me.
+
+I get Unicode- or UTF-8-related errors when I run getmail
+
+   This is almost certainly not getmail. Run getmail --version. If the
+   reported version is 6.x.x, then you are not actually running getmail; you
+   have "getmail6", which is a hostile (and license-violating) fork of
+   getmail and which contains bugs introduced by its maintainer.
+
+   Remove the "getmail6" package from your system. It may have been
+   introduced silently by an OS upgrade. Then install the latest version of
+   getmail from my website.
 
 Error messages
 

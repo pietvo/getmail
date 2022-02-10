@@ -22,7 +22,7 @@
     software.
 </p>
 <p class="about">
-    getmail is Copyright &copy; 1998-2019 Charles Cazabon.
+    getmail is Copyright &copy; 1998-2021 Charles Cazabon.
 </p>
 <p class="about">
     getmail is licensed under the
@@ -30,10 +30,20 @@
     (only). If you wish to obtain a license to distribute getmail under other
     terms, please contact me directly.
 </p>
+<p class="about">
+    Note that this license allows you to
+    <a href="https://en.wikipedia.org/wiki/Fork_(software_development)">"fork"</a>
+    getmail.  If you do so, please follow open-source/free-software best practices
+    and rename your fork so the package name and executable name do not contain
+    the word "getmail" or anything confusing similar.  This helps prevent users
+    mistakenly contacting the wrong people for help.
+    The fork must also remain under the GPLv2 license, and must preserve all
+    existing copyright notices in the code and documentation.
+</p>
 
 <h1 id="toc">Table of Contents</h1>
 <ul>
-    <li><a href="documentation.html">getmail documentation (version 5)</a></li>
+    <li><a href="documentation.html">getmail documentation</a></li>
     <li>
         <ul>
         <li><a href="documentation.html#title">getmail documentation</a></li>
@@ -41,6 +51,7 @@
             <ul>
             <li><a href="documentation.html#features">Features</a></li>
             <li><a href="documentation.html#v4differences">Differences from previous versions</a></li>
+            <li><a href="documentation.html#python3">A note on Python 3 compatibility</a></li>
             <li><a href="documentation.html#requirements">Requirements</a></li>
             <li><a href="documentation.html#obtaining">Obtaining getmail</a></li>
             <li><a href="documentation.html#installing">Installing getmail</a></li>
@@ -49,7 +60,7 @@
         </li>
         </ul>
     </li>
-    <li><a href="configuration.html">getmail configuration (version 5)</a></li>
+    <li><a href="configuration.html">getmail configuration</a></li>
     <li>
         <ul>
         <li><a href="configuration.html#configuring">Configuring getmail</a></li>
@@ -68,12 +79,13 @@
         </li>
         </ul>
     </li>
-    <li><a href="troubleshooting.html">getmail troubleshooting (version 5)</a></li>
+    <li><a href="troubleshooting.html">getmail troubleshooting</a></li>
     <li>
         <ul>
         <li><a href="troubleshooting.html#troubleshooting">Troubleshooting problems</a></li>
         <li>
             <ul>
+            <li><a href="troubleshooting.html#error-unicode">I get Unicode- or UTF-8-related errors when I run getmail</a></li>
             <li><a href="troubleshooting.html#error-messages">Error messages</a></li>
             <li><a href="troubleshooting.html#warning-messages">Warning messages</a></li>
             <li><a href="troubleshooting.html#unexpected-behaviour">Unexpected Behaviour</a></li>
@@ -81,7 +93,7 @@
         </li>
         </ul>
     </li>
-    <li><a href="faq.html">getmail frequently-asked questions (FAQs) (version 5)</a></li>
+    <li><a href="faq.html">getmail frequently-asked questions (FAQs)</a></li>
     <li>
         <ul>
         <li><a href="faq.html#faq">Frequently-Asked Questions (FAQs)</a></li>
@@ -1325,7 +1337,7 @@ sleep 1800
 [filter]
 type = Filter_external
 path = /usr/local/bin/spamc
-arguments = (&quot;-s 10000&quot;, )
+arguments = (&quot;-s", "10000&quot;)
 </pre>
 <p>
     The value supplied to the

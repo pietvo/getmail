@@ -22,7 +22,7 @@
     software.
 </p>
 <p class="about">
-    getmail is Copyright &copy; 1998-2019 Charles Cazabon.
+    getmail is Copyright &copy; 1998-2021 Charles Cazabon.
     &lt;charlesc-getmail @ pyropus.ca&gt;
 </p>
 <p class="about">
@@ -31,10 +31,19 @@
     (only). If you wish to obtain a license to distribute getmail under other
     terms, please contact me directly.
 </p>
-
+<p class="about">
+    Note that this license allows you to
+    <a href="https://en.wikipedia.org/wiki/Fork_(software_development)">"fork"</a>
+    getmail.  If you do so, please follow open-source/free-software best practices
+    and rename your fork so the package name and executable name do not contain
+    the word "getmail" or anything confusing similar.  This helps prevent users
+    mistakenly contacting the wrong people for help.
+    The fork must also remain under the GPLv2 license, and must preserve all
+    existing copyright notices in the code and documentation.
+</p>
 <h1 id="toc">Table of Contents</h1>
 <ul>
-    <li><a href="documentation.html">getmail documentation (version 5)</a></li>
+    <li><a href="documentation.html">getmail documentation</a></li>
     <li>
         <ul>
         <li><a href="documentation.html#title">getmail documentation</a></li>
@@ -42,6 +51,13 @@
             <ul>
             <li><a href="documentation.html#features">Features</a></li>
             <li><a href="documentation.html#v4differences">Differences from previous versions</a></li>
+            <li><a href="documentation.html#python3">A note on Python 3 compatibility</a></li>
+            <li>
+                <ul>
+                <li><a href="documentation.html#python3-native">What about a native Python 3 version?</a></li>
+                <li><a href="documentation.html#python3-getmail6">What about this "getmail6" version?  I heard it supports Python 3?</a></li>
+                </ul>
+            </li>
             <li><a href="documentation.html#requirements">Requirements</a></li>
             <li><a href="documentation.html#obtaining">Obtaining getmail</a></li>
             <li><a href="documentation.html#installing">Installing getmail</a></li>
@@ -90,7 +106,7 @@
         </li>
         </ul>
     </li>
-    <li><a href="configuration.html">getmail configuration (version 5)</a></li>
+    <li><a href="configuration.html">getmail configuration</a></li>
     <li>
         <ul>
         <li><a href="configuration.html#configuring">Configuring getmail</a></li>
@@ -109,12 +125,13 @@
         </li>
         </ul>
     </li>
-    <li><a href="troubleshooting.html">getmail troubleshooting (version 5)</a></li>
+    <li><a href="troubleshooting.html">getmail troubleshooting</a></li>
     <li>
         <ul>
         <li><a href="troubleshooting.html#troubleshooting">Troubleshooting problems</a></li>
         <li>
             <ul>
+            <li><a href="troubleshooting.html#error-unicode">I get Unicode- or UTF-8-related errors when I run getmail</a></li>
             <li><a href="troubleshooting.html#error-messages">Error messages</a></li>
             <li><a href="troubleshooting.html#warning-messages">Warning messages</a></li>
             <li><a href="troubleshooting.html#unexpected-behaviour">Unexpected Behaviour</a></li>
@@ -122,7 +139,7 @@
         </li>
         </ul>
     </li>
-    <li><a href="faq.html">getmail frequently-asked questions (FAQs) (version 5)</a></li>
+    <li><a href="faq.html">getmail frequently-asked questions (FAQs)</a></li>
     <li>
         <ul>
         <li><a href="faq.html#faq">Frequently-Asked Questions (FAQs)</a></li>
@@ -267,6 +284,143 @@
         class written, or if you want commercial support for getmail.
     </li>
 </ul>
+
+<!-- ********************************************************************** -->
+
+<h2 id="python3">A note on Python 3 compatibility</h2>
+<p>
+    getmail currently requires Python version 2.x, and is not currently
+    compatible with Python 3.  Various Linux/etc distributions have
+    removed Python 2 from their distributions, or disabled it by default,
+    because Python 2 has reached end-of-support.
+</p>
+<p>
+    Using Python 2 with getmail does not constitute a security risk.
+</p>
+<p>
+    To use Python 2.7 with a Linux/etc distribution which has disabled or
+    removed Python 2, you will need to install it using one of these methods:
+</p>
+<ul>
+    <li>
+        install Python 2.7 from a non-default package shipped by your distribution.
+        This may be named
+        <span class="file">python2.7</span>,
+        <span class="file">python27</span>,
+        <span class="file">python-2.7</span>
+        or similar.  For example,
+        <a href="https://packages.debian.org/bullseye/python2.7">Debian</a>
+        and
+        <a href="https://packages.ubuntu.com/impish/python2.7">Ubuntu</a>
+        ship python2.7, Redhat/CentOS ship python-2.7, and most other distributions
+        have something similar.  MacOS should have Python 2.7 available through
+        homebrew or other add-on repositories.
+    </li>
+    <li>
+        Installers are available for MacOS and Windows from
+        <a href="https://www.python.org/downloads/release/python-2718/">the Python.org</a> site.
+    </li>
+    <li>
+        If you cannot find a package for your distribution (and you probably
+        should be able to), you can download a
+        <a href="https://github.com/niess/python-appimage/releases/tag/python2.7">single-file executable "AppImage"</a>
+        containing Python 2.7 and the standard library.  Just download the file, make
+        it executable, rename it "python2" or create a symlink of that name pointing to
+        the AppImage file, and put it in <span class="file">/usr/local/bin/</span>, and
+        getmail will happily run with it.<br/>
+        For example, on an x86_64 Linux system, you could:
+        <pre>
+wget https://github.com/niess/python-appimage/releases/download/python2.7/python2.7.18-cp27-cp27m-manylinux1_x86_64.AppImage
+sudo install -m 755 python2.7.18-cp27-cp27m-manylinux1_x86_64.AppImage /usr/local/bin/
+sudo ln -sr /usr/local/bin/python2.7.18-cp27-cp27m-manylinux1_x86_64.AppImage /usr/local/bin/python2
+        </pre>
+        That's all that's necessary.
+    </li>
+    <li>
+        You can
+        <a href="https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tar.xz">build it from source</a>,
+        but I do not recommend this.  It's not terribly difficult, but ensuring you get proper
+        SSL/TLS support built-in can be fiddly and annoying.
+    </li>
+</ul>
+
+<h3 id="python3-native">What about a native Python 3 version?</h3>
+<p>
+    People ask why getmail isn't already Python 3 compatible.  Partly it's because
+    converting it will almost certainly break compatibility with Python 2, which is
+    still in wide use in network appliances and other embedded systems where Python
+    3 may not be available.
+</p>
+<p>
+    There is also the issue that doing a proper Python 3 conversion of getmail will
+    be a significant amount of work.  There is an automated "2to3" converter, but it
+    cannot make all the necessary changes, so there is still a lot of manual fixups
+    to make afterwards, and it results in ugly, hard-to-maintain code.  Doing a proper
+    conversion is on my list of things to do - it will be more of a rewrite, leaving
+    getmail v5 around for legacy systems, and cleaning up much of the historical
+    baggage getmail has accumulated over the last 23 years.  But the time I have
+    available for Free Software these days is a lot less than it was 23 years ago,
+    so it will be a while before this is complete and ready for use.
+</p>
+
+<h3 id="python3-getmail6">What about this "getmail6" version?  I heard it supports Python 3?</h3>
+<p>
+    "getmail6" isn't getmail.  I have nothing to do with it, by the choice of its maintainer.
+    In its current state as of this writing, it is actually not in compliance with the
+    GNU GPLv2 license, and is therefore not even legal to distribute.
+</p>
+<p>
+    It's a presumably-hostile fork that someone else did.  They ran getmail through the
+    automated 2-to-3 converter program as described above, and then started hacking in
+    fixes until it would run under Python 3.  They have not done a good job of this; I
+    started receiving a lot of bug reports and help requests from users who were running
+    this version.  Those bugs indicate, among other things, that this maintainer did not
+    properly handle text/unicode vs bytes issues in the conversion.  I have no confidence
+    that they have fixed all of the bugs they introduced when they did this conversion.
+    It's possible it corrupts or loses mail, or is otherwise somehow disastrously buggy,
+    and I do not recommend its use by anyone.
+</p>
+<p>
+    Why do I say it's a "hostile" fork?  Because I have communicated with the maintainer
+    and indicated I would be thrilled to accept their changes bringing Python 3
+    compatibility, as long as they were in reviewable condition, so that I could be sure
+    I wasn't introducing bugs into getmail when I merged their changes.
+</p>
+<p>
+    I also asked, nicely, for them to change the name of their fork to something other
+    than "getmail", as that is the polite, best-practice thing to do when forking
+    a Free Software project.
+</p>
+<p>
+    That maintainer has shown precisely zero interest in submitting his changes for me
+    to merge into getmail; he literally ignores every question/request I have made on
+    the subject.  On the name change, he outright refuses and claims he has the right to
+    use my project name as much as I do, which is ... distinctly unfriendly.  So people
+    run into problems with "getmail6", and they think it's an official version of getmail
+    from me, and that it is buggy, and they seek help from me or the getmail users'
+    mailing list.
+</p>
+<p>
+    Unfortunately, some Linux distributions have dropped getmail packages and included
+    "getmail6" packages when they deprecated Python 2.7 and stopped installing it by
+    default.  So some users have had getmail replaced out from underneath them without
+    even a notice or warning; they don't even know they're now running "getmail6" instead
+    of getmail.  So I've spent a lot of time walking people through problems and bug
+    reports, only to find later that they're not actually running getmail, and the
+    problem is in this other package.
+</p>
+<p>
+    Debian has apparently agreed to remove the "getmail6" package, and it should happen
+    soon.  I originally suggested they keep distributing it, but simply rename the
+    package and executable, given that its maintainer outright refuses to do so.
+    But apparently they'd rather drop it.
+</p>
+<p>
+    I have not yet made the effort to find all distributions that have silently "upgraded"
+    users from getmail to "getmail6".
+    If any getmail users would care to discuss this issue with their distribution's
+    maintainers, I would be happy to participate in the discussion.
+</p>
 
 <!-- ********************************************************************** -->
 

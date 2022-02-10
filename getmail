@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 import sys
 
@@ -9,6 +9,7 @@ if sys.hexversion < 0x2030300:
 import os.path
 import time
 import ConfigParser
+import netrc
 import poplib
 import imaplib
 import pprint
@@ -36,6 +37,7 @@ options_bool = (
     'message_log_verbose',
     'message_log_syslog',
     'fingerprint',
+    'use_netrc',
 )
 options_int = (
     'delete_after',
@@ -47,6 +49,7 @@ options_int = (
 )
 options_str = (
     'message_log',
+    'netrc_file',
 )
 
 # Unix only
@@ -88,6 +91,8 @@ defaults = {
     'message_log_syslog' : False,
     'logfile' : None,
     'fingerprint' : False,
+    'use_netrc' : False,
+    'netrc_file' : None,
 }
 
 
@@ -105,7 +110,7 @@ signal.signal(signal.SIGTERM, convert_to_sigint)
 #######################################
 def blurb():
     log.info('getmail version %s\n' % __version__)
-    log.info('Copyright (C) 1998-2020 Charles Cazabon.  Licensed under the '
+    log.info('Copyright (C) 1998-2021 Charles Cazabon.  Licensed under the '
              'GNU GPL version 2.\n')
 
 #######################################
@@ -620,6 +625,8 @@ def main():
                 'message_log_verbose' : defaults['message_log_verbose'],
                 'message_log_syslog' : defaults['message_log_syslog'],
                 'fingerprint' : defaults['fingerprint'],
+                'use_netrc' : defaults['use_netrc'],
+                'netrc_file' : defaults['netrc_file'],
             }
             # Python's ConfigParser .getboolean() couldn't handle booleans in
             # the defaults. Submitted a patch; they fixed it a different way.
@@ -694,6 +701,13 @@ def main():
                             % (config['message_log'], o)
                         )
 
+                # see if a netrc file is configured
+                netrc_object = None
+                if config['use_netrc']:
+                    netrc_object = netrc.netrc(
+                        config['netrc_file']
+                        and expand_user_vars(config['netrc_file']))
+
                 # Clear out the ConfigParser defaults before processing further
                 # sections
                 configparser._defaults = {}
@@ -721,6 +735,14 @@ def main():
                     else:
                         log.debug('    parameter %s="%s"\n' % (name, value))
                     retriever_args[name] = value
+                if netrc_object:
+                    # add username and password from netrc, as read above
+                    netrc_auth = netrc_object.authenticators(
+                        retriever_args['server'])
+                    if netrc_auth and netrc_auth[0]:
+                        retriever_args['username'] = netrc_auth[0]
+                    if netrc_auth and netrc_auth[2]:
+                        retriever_args['password'] = netrc_auth[2]
                 log.debug('    instantiating retriever %s with args %s\n'
                           % (retriever_type, format_params(retriever_args)))
                 try:

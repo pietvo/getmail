@@ -1,3 +1,15 @@
+Version 5.16
+31 October 2021
+    -add new use_netrc and netrc_file configuration options to support
+    reading username/password from a .netrc file.  Thanks: Stephen Gildea.
+    -documentation updates.
+
+Version 5.15
+10 December 2020
+    -documentation-only update.  No code changes.
+    -fix example spamc arguments in FAQ.  Thanks: Christoph Scholzen.
+    -document exit codes in manpages.  Thanks: Langenxx Feld.
+
 Version 5.14
 19 August 2019
     -remove socket setblocking() calls which should be no longer needed,

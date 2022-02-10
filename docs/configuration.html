@@ -22,7 +22,7 @@
     software.
 </p>
 <p class="about">
-    getmail is Copyright &copy; 1998-2019 Charles Cazabon.
+    getmail is Copyright &copy; 1998-2021 Charles Cazabon.
 </p>
 <p class="about">
     getmail is licensed under the
@@ -30,10 +30,20 @@
     (only). If you wish to obtain a license to distribute getmail under other
     terms, please contact me directly.
 </p>
+<p class="about">
+    Note that this license allows you to
+    <a href="https://en.wikipedia.org/wiki/Fork_(software_development)">"fork"</a>
+    getmail.  If you do so, please follow open-source/free-software best practices
+    and rename your fork so the package name and executable name do not contain
+    the word "getmail" or anything confusing similar.  This helps prevent users
+    mistakenly contacting the wrong people for help.
+    The fork must also remain under the GPLv2 license, and must preserve all
+    existing copyright notices in the code and documentation.
+</p>
 
 <h1 id="toc">Table of Contents</h1>
 <ul>
-    <li><a href="documentation.html">getmail documentation (version 5)</a></li>
+    <li><a href="documentation.html">getmail documentation</a></li>
     <li>
         <ul>
         <li><a href="documentation.html#title">getmail documentation</a></li>
@@ -41,6 +51,7 @@
             <ul>
             <li><a href="documentation.html#features">Features</a></li>
             <li><a href="documentation.html#v4differences">Differences from previous versions</a></li>
+            <li><a href="documentation.html#python3">A note on Python 3 compatibility</a></li>
             <li><a href="documentation.html#requirements">Requirements</a></li>
             <li><a href="documentation.html#obtaining">Obtaining getmail</a></li>
             <li><a href="documentation.html#installing">Installing getmail</a></li>
@@ -49,7 +60,7 @@
         </li>
         </ul>
     </li>
-    <li><a href="configuration.html">getmail configuration (version 5)</a></li>
+    <li><a href="configuration.html">getmail configuration</a></li>
     <li>
         <ul>
         <li><a href="configuration.html#configuring">Configuring getmail</a></li>
@@ -148,12 +159,13 @@
         </li>
         </ul>
     </li>
-    <li><a href="troubleshooting.html">getmail troubleshooting (version 5)</a></li>
+    <li><a href="troubleshooting.html">getmail troubleshooting</a></li>
     <li>
         <ul>
         <li><a href="troubleshooting.html#troubleshooting">Troubleshooting problems</a></li>
         <li>
             <ul>
+            <li><a href="troubleshooting.html#error-unicode">I get Unicode- or UTF-8-related errors when I run getmail</a></li>
             <li><a href="troubleshooting.html#error-messages">Error messages</a></li>
             <li><a href="troubleshooting.html#warning-messages">Warning messages</a></li>
             <li><a href="troubleshooting.html#unexpected-behaviour">Unexpected Behaviour</a></li>
@@ -161,7 +173,7 @@
         </li>
         </ul>
     </li>
-    <li><a href="faq.html">getmail frequently-asked questions (FAQs) (version 5)</a></li>
+    <li><a href="faq.html">getmail frequently-asked questions (FAQs)</a></li>
     <li>
         <ul>
         <li><a href="faq.html#faq">Frequently-Asked Questions (FAQs)</a></li>
@@ -531,7 +543,9 @@ type = <span class="meta">typename</span>
     <li>
         username
         (<a href="#parameter-string">string</a>)
-        &mdash; username to provide when logging in to the mail server
+        &mdash; username to provide when logging in to the mail server.
+        If you enable <a href="#use_netrc">use_netrc</a>, the netrc file
+        can supply a username for each retriever.
     </li>
 </ul>
 <p>
@@ -555,6 +569,7 @@ type = <span class="meta">typename</span>
             <li>by running an arbitrary command specified with the password_command parameter (see below)</li>
             <li>on Mac OS X only, from the OS X keychain</li>
             <li>on systems with Gnome keyring support, from the default Gnome keyring</li>
+            <li>if <a href="#use_netrc">use_netrc</a> option is True, from a .netrc file</li>
             <li>if not found via any of the above methods, getmail will prompt for the password when run</li>
         </ol>
         To store your POP/IMAP account password into the Gnome keyring, ensure 
@@ -2358,6 +2373,28 @@ localpart_translate = ('mailhostaccount-', '')
         messages about each of its actions.  If set to 1, it prints messages
         about retrieving and deleting messages (only).  If set to 0, getmail
         will only print warnings and errors. Default: 1.
+    </li>
+     <li>
+        <a name="use_netrc">use_netrc</a>
+        (<a href="#parameter-boolean">boolean</a>)
+        &mdash; if set, getmail will read a <span class="file">.netrc</span>
+        or <span class="file">.authinfo</span> file to set the
+        <span class="file">username</span> and/or
+        <span class="file">password</span> parameter for matching
+        retrievers.
+        A retriever matches if its <span class="file">server</span> parameter
+        matches a <span class="file">machine</span> entry in the netrc file.
+        The location of the .netrc file to read can be set with
+        the <a href="#netrc_file">netrc_file</a> option.  Default: False.
+    </li>
+    <li>
+        <a name="netrc_file">netrc_file</a>
+        (<a href="#parameter-boolean">string</a>)
+        &mdash; sets the file that <a href="#use_netrc">use_netrc</a> reads.
+        Has no effect unless <a href="#use_netrc">use_netrc</a> is True.
+        Default: unset, which means <a href="#use_netrc">use_netrc</a> will
+        read the default netrc file for your system,
+        typically <span class="file">~/.netrc</span>.
     </li>
     <li>
         read_all
