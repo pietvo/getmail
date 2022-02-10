@@ -19,7 +19,7 @@
 #
 # Derived from oauth2.py (https://github.com/google/gmail-oauth2-tools).
 # Heavily modified and rewritten by Stefan Krah.
-#
+# Gpg code added by Pieter van Oostrum <pieter@vanoostrum.org>
 
 
 import os
@@ -32,11 +32,21 @@ import time
 
 class OAuth2(object):
 
-    def __init__(self, token_data_path):
+    def __init__(self, token_data_path, gpg_key):
         self.token_data_path = token_data_path
+        self.gpg_key = gpg_key
 
-        with open(self.token_data_path) as f:
-            self.data = json.load(f)
+        if self.gpg_key:
+            from subprocess import Popen, PIPE
+            cmd = ['gpg', '-q', '-r', self.gpg_key, '-d', token_data_path]
+            process = Popen(cmd, stdout=PIPE)
+            out, err = process.communicate()
+            self.data = json.loads(out)
+            if err:
+                print 'Error on decryption:', err
+        else:
+            with open(self.token_data_path) as f:
+                self.data = json.load(f)
 
     def copy(self, *keys):
         data = {}
@@ -69,8 +79,20 @@ class OAuth2(object):
         if refresh_token is not None:
             self.data['refresh_token'] = refresh_token
 
-        with open(self.token_data_path, "w") as f:
-            json.dump(self.data, f)
+        if self.gpg_key:
+            from subprocess import Popen, PIPE
+            json_str = json.dumps(self.data)
+            cmd = ['gpg', '-q', '-r', self.gpg_key, '-e']
+            process = Popen(cmd, stdin=PIPE, stdout=PIPE)
+            out, err = process.communicate(json_str)
+            if err:
+                print 'Error on encryption:', err
+
+            with open(self.token_data_path, "wb") as f:
+                f.write(out)
+        else:
+            with open(self.token_data_path, "w") as f:
+                json.dump(self.data, f)
 
     def init_tokens(self, code):
         params = self.copy('user', 'client_id', 'client_secret',
@@ -95,15 +117,26 @@ class OAuth2(object):
         return self.data['access_token']
 
 
+def check_gpg_key(value):
+    "Check if gpg key is at least 8 chars hex"
+    import re
+    if len(value) >= 8 and re.match('[0-9a-fA-F]+$', value):
+        return value
+    raise argparse.ArgumentTypeError(
+                "'{}' is not a valid gpg key - must be at least 8 hex characters".format(value))
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--init", action="store_true", default=False,
                         help="initialize access and refresh tokens")
     parser.add_argument('tokenfile', metavar='<token data file path>',
                         help="location of the token data file")
+    parser.add_argument('--gpg', metavar='<gpg key id>', dest='gpg_key', type=check_gpg_key,
+                        help="A gpg key ID used for encryption of the token data file")
 
     args = parser.parse_args()
-    auth = OAuth2(args.tokenfile)
+    auth = OAuth2(args.tokenfile, args.gpg_key)
 
     if args.init:
         print "Visit this url to obtain a verification code:"

@@ -1,14 +1,17 @@
-getmail-gmail-xoauth-tokens-gpg is an adapted version of getmail-gmail-xoauth-tokens that adds gpg encryption to the <mailbox>.json setup file.
+I have added gpg encryption support to getmail-gmail-xoauth-tokens.
+
+It lets you encrypt the <mailbox>.json setup file with a GPG public key.
 
 As https://www.bytereef.org/howto/oauth2/getmail.html states about getmail-gmail-xoauth-tokens:
 The resulting setup is not more secure than a regular getmailrc with 0600 permissions.
 
 I wanted to get the additional protection where on my Mac all the passwords would be stored in the MacOS keychain.
-The <mailbox>.json file that uses contains a secret token that has the same function as a password.
+The <mailbox>.json file contains a secret token that has the same function as a password and it is not protected.
 
-So with getmail-gmail-xoauth-tokens-gpg you can encrypt that file with a public gpg key that you own, and the script will decrypt is. I chose to create a seprate key for this purpose. Of course you will have to supply the password of the secret key, but on my Mac, I can choose to have that password stored in the Keychain. I put it in the same Keychain as my other getmail passwords, and that Keychain is protected by a master password, which I then (usually) have to supply only once after login.
+So with the new getmail-gmail-xoauth-tokens you can encrypt that file with a public gpg key that you own, and the script will decrypt it. I chose to create a separate key for this purpose in my setup. Of course you will have to supply the passphrase of the secret key, but on my Mac, I can choose to have that passphrase stored in the Keychain. I put it in the same Keychain as my other getmail passwords, and that Keychain is protected by a master password, which I then (usually) have to supply only once after login.
 
-The script is called as: getmail-gmail-xoauth-tokens-gpg <mailbox.json.gpg> <gpg-key-user-id>.
+The getmail-gmail-xoauth-token script is in this case called with an additional argument, like:
+getmail-gmail-xoauth-tokens --gpg=<gpg-key-user-id> <mailbox.json.gpg>.
 It also works with --init; it then decrypts the file, updates it and re-encrypts it.
 
 Typical setup of rcfile:
@@ -18,8 +21,9 @@ type = SimpleIMAPSSLRetriever
 server = outlook.office365.com
 username = <email-address>
 use_xoauth2 = True
-password_command = ("getmail-gmail-xoauth-tokens-gpg", "/Users/<user>/.getmail/<mailbox>.json.gpg", "<user-id>")
+password_command = ("getmail-gmail-xoauth-tokens", "--gpg=<user-id>", "/Users/<user>/.getmail/<mailbox>.json.gpg")
 
 etc.
 
-
+Pieter van Oostrum
+pieter@vanoostrum.org
